@@ -1,10 +1,12 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.models import User
+from django.shortcuts import render
+# from django.urls import reverse
+# from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
-from django.contrib.auth.forms import UserCreationForm
+
+
+# from django.contrib.auth.forms import UserCreationForm
 
 
 class AboutView(TemplateView):
