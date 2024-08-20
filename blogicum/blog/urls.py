@@ -1,13 +1,11 @@
 from django.urls import path
 from django.urls.conf import include
 
-from . import views
 from .views import (
     CreatePostView, ProfileView, EditPostView,
-    DeletePostView, ProfileEditView,
-    PostDetailView, IndexView, CategoryView,
-    CreateCommentView, EditCommentView, DeleteCommentView
-)
+    DeletePostView, ProfileEditView, PostDetailView,
+    IndexView, CategoryView, CreateCommentView,
+    EditCommentView, DeleteCommentView)
 
 app_name = 'blog'
 
@@ -34,6 +32,4 @@ urlpatterns = [
          name="add_comment"),
     path("posts/<post_id>/edit_comment/<comment_id>/",
          EditCommentView.as_view(), name="edit_comment"),
-    # path("posts/<post_id>/delete_comment/<comment_id>/",
-    #      DeleteCommentView.as_view(), name="delete_comment"),
 ]
