@@ -72,7 +72,7 @@ class Post(BaseModel):
     class Meta:
         verbose_name = 'публикация'
         verbose_name_plural = 'Публикации'
-        ordering = ['pub_date']
+        ordering = ['-pub_date']
 
 
 class Comment(BaseModel):
