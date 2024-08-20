@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "../base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
   {% if next %}
@@ -21,7 +21,7 @@
         Войти в систему
       </div>
       <div class="card-body">
-        <form method="post" action="{% url 'login' %}">
+        <form method="post" action="{% url 'blog:login' %}">
           {% csrf_token %}
           {% bootstrap_form form %}
           <input type="hidden" name="next" value="{{ next }}">
