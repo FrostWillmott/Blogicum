@@ -329,7 +329,7 @@ class EditCommentView(LoginRequiredMixin, UpdateView):
         comment = self.get_object()
         if comment.author != self.request.user:
             raise PermissionDenied(
-                "You are not allowed to edit this comment.")
+                "Вы не можете менять чужие комментарии.")
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -345,6 +345,13 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
     model = Comment
     template_name = 'blog/comment.html'
     pk_url_kwarg = 'comment_id'
+
+    def dispatch(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.author != self.request.user and not self.request.user.is_staff:
+            raise PermissionDenied(
+                "YВы не можете удалять чужие комментарии.")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
