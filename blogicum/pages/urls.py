@@ -1,16 +1,22 @@
 from django.urls import path
 
 from . import views
-from .views import register, profile
+from .views import (
+    register, AboutView, RulesView)
 
 app_name = 'pages'
 
 urlpatterns = [
-    path('about/', views.about, name='about'),
-    path('rules/', views.rules, name='rules'),
+    path('about/', AboutView.as_view(), name='about'),
+    path('rules/', RulesView.as_view(), name='rules'),
     path('auth/registration/', register, name='registration'),
-    path('profile/<str:username>/', profile, name='profile'),
+    # path('profile/<str:username>/', profile, name='profile'),
+    # path('profile/<str:username>/', ProfileView.as_view(),
+    #      name='profile'),
+    # path("profile/<slug:username>/edit/", ProfileEditView.as_view(),
+    #      name="edit_profile"),
 ]
 
-handler404 = 'pages.views.page_not_found'
-handler500 = 'pages.views.server_error'
+handler500 = 'pages.views.custom_500_error'
+handler404 = 'pages.views.custom_404_error'
+handler403 = 'pages.views.csrf_failure'

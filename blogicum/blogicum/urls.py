@@ -21,5 +21,6 @@ urlpatterns = [
     ),
 ]
 
-handler500 = 'blog.views.custom_500_error'
-handler404 = 'blog.views.custom_404_error'
+# handler500 = 'pages.views.custom_500_error'
+# handler404 = 'pages.views.custom_404_error'
+# handler403 = 'pages.views.csrf_failure'

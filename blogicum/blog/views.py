@@ -135,7 +135,6 @@ class CategoryView(ListView):
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')
-        category_slug = self.kwargs.get('category_slug')
         category = get_object_or_404(Category, slug=category_slug)
         if not category.is_published:
             raise Http404("Category not found")
@@ -360,11 +359,3 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
                             kwargs={'pk': self.kwargs['post_id']})
-
-
-def custom_500_error(request):
-    return render(request, 'pages/500.html', status=500)
-
-
-def custom_404_error(request, exception):
-    return render(request, 'pages/404.html', status=404)
