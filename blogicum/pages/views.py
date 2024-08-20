@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
+from django.contrib.auth.forms import UserCreationForm
 
 
 class AboutView(TemplateView):
@@ -30,18 +31,18 @@ class RulesView(TemplateView):
 #     return render(request, 'pages/500.html', status=500)
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(reverse('login'))
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/registration.html',
-                  {'form': form})
-
-
+# def register(request):
+#     if request.method == 'POST':
+#         form = UserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect(reverse('login'))
+#     else:
+#         form = UserCreationForm()
+#     return render(request, 'registration/registration.html',
+#                   {'form': form})
+#
+#
 # @login_required
 # def profile(request, username):
 #     user = User.objects.get(username=username)

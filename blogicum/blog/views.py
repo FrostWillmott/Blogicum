@@ -34,7 +34,7 @@ class ProfileView(TemplateView):
         profile_user = get_object_or_404(User, username=self.kwargs[
             'username'])
         posts = Post.objects.filter(author=profile_user).annotate(
-            comment_count=Count('comments'))
+            comment_count=Count('comments')).order_by('-pub_date')
         paginator = Paginator(posts, 10)  # 10 публикаций на страницу
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
