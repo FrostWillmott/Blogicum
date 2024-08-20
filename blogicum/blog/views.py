@@ -51,6 +51,9 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_queryset(self):
+        return filter_posts().annotate(comment_count=Count('comments'))
+
     def get_success_url(self):
         return reverse_lazy('blog:profile',
                             kwargs={'username': self.object.username})
