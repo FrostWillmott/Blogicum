@@ -5,6 +5,7 @@ from django.shortcuts import render
 
 from django import forms
 from django.utils import timezone
+from django.http import Http404
 
 from django.shortcuts import get_object_or_404
 
@@ -31,7 +32,8 @@ class ProfileView(TemplateView):
         context = super().get_context_data(**kwargs)
         profile_user = get_object_or_404(User, username=self.kwargs[
             'username'])
-        posts = Post.objects.filter(author=profile_user)
+        posts = Post.objects.filter(author=profile_user).annotate(
+            comment_count=Count('comments'))
         paginator = Paginator(posts, 10)  # 10 публикаций на страницу
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -129,6 +131,10 @@ class CategoryView(ListView):
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')
+        category_slug = self.kwargs.get('category_slug')
+        category = get_object_or_404(Category, slug=category_slug)
+        if not category.is_published:
+            raise Http404("Category not found")
         return filter_posts().filter(category__slug=category_slug)
 
 

@@ -18,3 +18,5 @@ urlpatterns = [
         name='registration',
     ),
 ]
+
+handler500 = 'blog.views.custom_500_error'

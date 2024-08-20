@@ -33,5 +33,3 @@ urlpatterns = [
     path("posts/<post_id>/edit_comment/<comment_id>/",
          EditCommentView.as_view(), name="edit_comment"),
 ]
-
-handler500 = 'blogicum.views.custom_500_error'
