@@ -49,4 +49,6 @@ def profile(request, username):
     user = User.objects.get(username=username)
     posts = Post.objects.filter(author=user).order_by('-pub_date')
     # Здесь добавьте логику для получения публикаций пользователя
-    return render(request, 'profile.html', {'user': user})
+    # return render(request, 'profile.html', {'user': user})
+    return render(request, 'profile.html',
+                  {'user': user, 'posts': posts})
