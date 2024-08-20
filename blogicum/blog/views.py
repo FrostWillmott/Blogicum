@@ -1,5 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
+from django.db.models import Count
+from django.shortcuts import render
 
 from django import forms
 from django.utils import timezone
@@ -29,8 +31,7 @@ class ProfileView(TemplateView):
         context = super().get_context_data(**kwargs)
         profile_user = get_object_or_404(User, username=self.kwargs[
             'username'])
-        posts = Post.objects.filter(author=profile_user).order_by(
-            '-pub_date')
+        posts = Post.objects.filter(author=profile_user)
         paginator = Paginator(posts, 10)  # 10 публикаций на страницу
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -58,13 +59,13 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 # NUMBER_OF_POSTS = 5
 
 #
-# def filter_posts():
-#     return Post.objects.select_related(
-#         'author', 'location', 'category').filter(
-#         pub_date__lte=timezone.now(),
-#         is_published=True,
-#         category__is_published=True
-#     )
+def filter_posts():
+    return Post.objects.select_related(
+        'author', 'location', 'category').filter(
+        pub_date__lte=timezone.now(),
+        is_published=True,
+        category__is_published=True
+    )
 
 
 class IndexView(ListView):
@@ -73,12 +74,12 @@ class IndexView(ListView):
     context_object_name = 'post_list'
     paginate_by = 10
 
-    def get_queryset(self):
-        return Post.objects.filter(is_published=True,
-                                   category__is_published=True,
-                                   pub_date__lte=timezone.now())
     # def get_queryset(self):
-    #     return filter_posts()
+    #     return Post.objects.filter(is_published=True,
+    #                                category__is_published=True,
+    #                                pub_date__lte=timezone.now())
+    def get_queryset(self):
+        return filter_posts().annotate(comment_count=Count('comments'))
     #
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -128,8 +129,7 @@ class CategoryView(ListView):
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')
-        return Post.objects.filter(category__slug=category_slug,
-                                   category__is_published=True)
+        return filter_posts().filter(category__slug=category_slug)
 
 
 # def category_posts(request, category_slug):
@@ -335,3 +335,7 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
                             kwargs={'pk': self.kwargs['post_id']})
+
+
+def custom_500_error(request):
+    return render(request, '500.html', status=500)
