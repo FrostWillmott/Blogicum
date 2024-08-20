@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 
 from django import forms
+from django.utils import timezone
 
 from django.shortcuts import get_object_or_404
 
@@ -28,7 +29,8 @@ class ProfileView(TemplateView):
         context = super().get_context_data(**kwargs)
         profile_user = get_object_or_404(User, username=self.kwargs[
             'username'])
-        posts = Post.objects.filter(author=profile_user)
+        posts = Post.objects.filter(author=profile_user).order_by(
+            '-pub_date')
         paginator = Paginator(posts, 10)  # 10 публикаций на страницу
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -71,6 +73,10 @@ class IndexView(ListView):
     context_object_name = 'post_list'
     paginate_by = 10
 
+    def get_queryset(self):
+        return Post.objects.filter(is_published=True,
+                                   category__is_published=True,
+                                   pub_date__lte=timezone.now())
     # def get_queryset(self):
     #     return filter_posts()
     #
@@ -292,9 +298,13 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     #     post.save()
     #     return super().form_valid(form)
     #
+    # def get_success_url(self):
+    #     return reverse('blog:profile',
+    #                    kwargs={'username': self.request.user.username})
+
     def get_success_url(self):
-        return reverse('blog:profile',
-                       kwargs={'username': self.request.user.username})
+        return reverse('blog:post_detail',
+                       kwargs={'pk': self.kwargs['post_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
