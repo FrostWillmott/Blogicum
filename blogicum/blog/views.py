@@ -348,9 +348,10 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         comment = self.get_object()
-        if comment.author != self.request.user and not self.request.user.is_staff:
+        if (comment.author != self.request.user
+                and not self.request.user.is_staff):
             raise PermissionDenied(
-                "YВы не можете удалять чужие комментарии.")
+                "Вы не можете удалять чужие комментарии.")
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
