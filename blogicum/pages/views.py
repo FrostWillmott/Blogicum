@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from blog.models import Post
 
 
 def about(request):
@@ -46,5 +47,6 @@ def register(request):
 @login_required
 def profile(request, username):
     user = User.objects.get(username=username)
+    posts = Post.objects.filter(author=user).order_by('-pub_date')
     # Здесь добавьте логику для получения публикаций пользователя
     return render(request, 'profile.html', {'user': user})
