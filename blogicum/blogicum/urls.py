@@ -3,6 +3,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 from django.urls import path, include, reverse_lazy
 
+# from django.conf.urls import handler500, handler404
+
 urlpatterns = [
     path('', include('blog.urls', namespace='blog')),
     path('pages/', include('pages.urls', namespace='pages')),
@@ -20,3 +22,4 @@ urlpatterns = [
 ]
 
 handler500 = 'blog.views.custom_500_error'
+handler404 = 'blog.views.custom_404_error'

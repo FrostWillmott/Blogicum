@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django import forms
 from django.utils import timezone
 from django.http import Http404
+from django.core.exceptions import PermissionDenied
 
 from django.shortcuts import get_object_or_404
 
@@ -324,6 +325,13 @@ class EditCommentView(LoginRequiredMixin, UpdateView):
     form_class = CommentForm
     pk_url_kwarg = 'comment_id'
 
+    def dispatch(self, request, *args, **kwargs):
+        comment = self.get_object()
+        if comment.author != self.request.user:
+            raise PermissionDenied(
+                "You are not allowed to edit this comment.")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
                             kwargs={'pk': self.kwargs['post_id']})
@@ -344,4 +352,8 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
 
 
 def custom_500_error(request):
-    return render(request, '500.html', status=500)
+    return render(request, 'pages/500.html', status=500)
+
+
+def custom_404_error(request, exception):
+    return render(request, 'pages/404.html', status=404)
