@@ -20,6 +20,8 @@ from django.views.generic import (
     CreateView, DetailView, ListView, UpdateView, DeleteView
 )
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 """Views about User Profile"""
 
 
@@ -233,7 +235,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     #     return kwargs
 
 
-# @method_decorator(login_required, name='dispatch')
+@method_decorator(login_required, name='dispatch')
 class EditPostView(LoginRequiredMixin, UpdateView):
     template_name = 'blog/create.html'
     model = Post
