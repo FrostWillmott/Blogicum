@@ -23,24 +23,43 @@ from django.views.generic import (
 """Views about User Profile"""
 
 
-class ProfileView(TemplateView):
+# class ProfileView(TemplateView):
+#     template_name = 'blog/profile.html'
+#
+#     # def dispatch(self, *args, **kwargs):
+#     #     return super().dispatch(*args, **kwargs)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         profile_user = get_object_or_404(User, username=self.kwargs[
+#             'username'])
+#         posts = Post.objects.filter(author=profile_user).annotate(
+#             comment_count=Count('comments')).order_by('-pub_date')
+#         paginator = Paginator(posts, 10)  # 10 публикаций на страницу
+#         page_number = self.request.GET.get('page')
+#         page_obj = paginator.get_page(page_number)
+#         context['page_obj'] = page_obj
+#         context['categories'] = Category.objects.all()
+#         context['profile'] = profile_user
+#         return context
+class ProfileView(ListView):
+    model = Post
     template_name = 'blog/profile.html'
+    context_object_name = 'post_list'
+    paginate_by = 10
 
-    # def dispatch(self, *args, **kwargs):
-    #     return super().dispatch(*args, **kwargs)
+    def get_queryset(self):
+        profile_user = get_object_or_404(User, username=self.kwargs[
+            'username'])
+        return filter_posts().filter(author=profile_user).annotate(
+            comment_count=Count('comments')).order_by('-pub_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile_user = get_object_or_404(User, username=self.kwargs[
-            'username'])
-        posts = Post.objects.filter(author=profile_user).annotate(
-            comment_count=Count('comments')).order_by('-pub_date')
-        paginator = Paginator(posts, 10)  # 10 публикаций на страницу
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context['page_obj'] = page_obj
         context['categories'] = Category.objects.all()
-        context['profile'] = profile_user
+        context['profile'] = get_object_or_404(User,
+                                               username=self.kwargs[
+                                                   'username'])
         return context
 
 
