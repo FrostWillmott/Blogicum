@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 
 from django.urls import reverse_lazy, reverse
 # from django.views.generic import TemplateView
@@ -233,19 +233,27 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     #     return kwargs
 
 
+# @method_decorator(login_required, name='dispatch')
 class EditPostView(LoginRequiredMixin, UpdateView):
     template_name = 'blog/create.html'
     model = Post
     form_class = PostForm
     pk_url_kwarg = 'post_id'
 
+    # def dispatch(self, request, *args, **kwargs):
+    #     post = self.get_object()
+    #     if post.author != self.request.user:
+    #         raise PermissionDenied(
+    #             "Вы не можете менять чужие посты.")
+    #     return super().dispatch(request, *args, **kwargs)
+
     def dispatch(self, request, *args, **kwargs):
         post = self.get_object()
+        if not request.user.is_authenticated:
+            return redirect('blog:post_detail', id=post.id)
         if post.author != self.request.user:
-            raise PermissionDenied(
-                "Вы не можете менять чужие посты.")
+            raise PermissionDenied("Вы не можете менять чужие посты.")
         return super().dispatch(request, *args, **kwargs)
-
     # def dispatch(self, *args, **kwargs):
     #     self.post = get_object_or_404(Post, id=self.kwargs['post_id'])
     #     if self.post.author != self.request.user:
