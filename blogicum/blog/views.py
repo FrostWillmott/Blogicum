@@ -216,6 +216,13 @@ class EditPostView(LoginRequiredMixin, UpdateView):
     form_class = PostForm
     pk_url_kwarg = 'post_id'
 
+    def dispatch(self, request, *args, **kwargs):
+        post = self.get_object()
+        if post.author != self.request.user:
+            raise PermissionDenied(
+                "Вы не можете менять чужие посты.")
+        return super().dispatch(request, *args, **kwargs)
+
     # def dispatch(self, *args, **kwargs):
     #     self.post = get_object_or_404(Post, id=self.kwargs['post_id'])
     #     if self.post.author != self.request.user:
