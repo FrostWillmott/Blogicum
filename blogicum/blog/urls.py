@@ -12,7 +12,7 @@ app_name = 'blog'
 urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),
     path('', IndexView.as_view(), name='index'),
-    path('posts/<int:post_id>/', PostDetailView.as_view(),
+    path('posts/<int:id>/', PostDetailView.as_view(),
          name='post_detail'),
     path('category/<slug:category_slug>/', CategoryView.as_view(),
          name='category_posts'),

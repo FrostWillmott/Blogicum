@@ -112,7 +112,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
-    pk_url_kwarg = 'post_id'
+    pk_url_kwarg = 'id'
 
     # def post_detail(request, id):
     #     template = 'blog/detail.html'
@@ -314,7 +314,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('blog:post_detail',
-                       kwargs={'pk': self.kwargs['post_id']})
+                       kwargs={'id': self.kwargs['post_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
