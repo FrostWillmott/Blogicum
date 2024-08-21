@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+# from django.core.paginator import Paginator
 from django.db.models import Count
 # from django.shortcuts import render
 
@@ -11,7 +11,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 from django.contrib.auth.models import User
 
 from .forms import PostForm, CommentForm
