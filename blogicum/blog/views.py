@@ -51,7 +51,7 @@ class ProfileView(ListView):
     def get_queryset(self):
         profile_user = get_object_or_404(User, username=self.kwargs[
             'username'])
-        return filter_posts().filter(author=profile_user).annotate(
+        return Post.objects.filter(author=profile_user).annotate(
             comment_count=Count('comments')).order_by('-pub_date')
 
     def get_context_data(self, **kwargs):
