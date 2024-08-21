@@ -112,6 +112,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
+    pk_url_kwarg = 'id'
 
     # def post_detail(request, id):
     #     template = 'blog/detail.html'
