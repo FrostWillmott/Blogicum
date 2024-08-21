@@ -17,6 +17,6 @@ urlpatterns = [
     #      name="edit_profile"),
 ]
 
-handler500 = 'pages.views.custom_500_error'
-handler404 = 'pages.views.page_not_found'
-handler403 = 'pages.views.csrf_failure'
+# handler500 = 'pages.views.custom_500_error'
+# handler404 = 'pages.views.page_not_found'
+# handler403 = 'pages.views.csrf_failure'
