@@ -251,10 +251,8 @@ class EditPostView(LoginRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         post = self.get_object()
-        if not request.user.is_authenticated:
-            return redirect('blog:post_detail', post_id=post.id)
         if post.author != self.request.user:
-            raise PermissionDenied("Вы не можете менять чужие посты.")
+            return redirect('blog:post_detail', post_id=post.id)
         return super().dispatch(request, *args, **kwargs)
     # def dispatch(self, *args, **kwargs):
     #     self.post = get_object_or_404(Post, id=self.kwargs['post_id'])
