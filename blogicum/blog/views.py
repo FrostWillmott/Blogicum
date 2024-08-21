@@ -337,7 +337,7 @@ class EditCommentView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
-                            kwargs={'pk': self.kwargs['post_id']})
+                            kwargs={'id': self.kwargs['post_id']})
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()
@@ -359,4 +359,4 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
-                            kwargs={'pk': self.kwargs['post_id']})
+                            kwargs={'id': self.kwargs['post_id']})
