@@ -137,7 +137,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
-    pk_url_kwarg = 'id'
+    pk_url_kwarg = 'post_id'
 
     # def post_detail(request, id):
     #     template = 'blog/detail.html'
@@ -252,7 +252,7 @@ class EditPostView(LoginRequiredMixin, UpdateView):
     def dispatch(self, request, *args, **kwargs):
         post = self.get_object()
         if not request.user.is_authenticated:
-            return redirect('blog:post_detail', id=post.id)
+            return redirect('blog:post_detail', post_id=post.id)
         if post.author != self.request.user:
             raise PermissionDenied("Вы не можете менять чужие посты.")
         return super().dispatch(request, *args, **kwargs)
@@ -288,7 +288,7 @@ class EditPostView(LoginRequiredMixin, UpdateView):
     #     return kwargs
     def get_success_url(self):
         return reverse('blog:post_detail',
-                       kwargs={'id': self.object.id})
+                       kwargs={'post_id': self.object.id})
 
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
@@ -354,7 +354,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse('blog:post_detail',
-                       kwargs={'id': self.kwargs['post_id']})
+                       kwargs={'post_id': self.kwargs['post_id']})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -377,7 +377,7 @@ class EditCommentView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
-                            kwargs={'id': self.kwargs['post_id']})
+                            kwargs={'post_id': self.kwargs['post_id']})
 
     # def get_queryset(self):
     #     queryset = super().get_queryset()
@@ -399,4 +399,4 @@ class DeleteCommentView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('blog:post_detail',
-                            kwargs={'id': self.kwargs['post_id']})
+                            kwargs={'post_id': self.kwargs['post_id']})
