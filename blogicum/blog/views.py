@@ -231,6 +231,7 @@ class EditPostView(UserPassesTestMixin, UpdateView):
         return reverse('blog:post_detail',
                        kwargs={'post_id': self.object.id})
 
+
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/create.html'
