@@ -214,11 +214,9 @@ class EditPostView(UserPassesTestMixin, UpdateView):
     #             "Вы не можете менять чужие посты.")
     #     return super().dispatch(request, *args, **kwargs)
 
-
     def test_func(self):
         object = self.get_object()
         return object.author == self.request.user
-
 
     def dispatch(self, request, *args, **kwargs):
         post = self.get_object()
@@ -229,11 +227,9 @@ class EditPostView(UserPassesTestMixin, UpdateView):
                             post_id=post.id)
         return super().dispatch(request, *args, **kwargs)
 
-
     def get_success_url(self):
         return reverse('blog:post_detail',
                        kwargs={'post_id': self.object.id})
-
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
     model = Post
@@ -268,13 +264,11 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     model = Comment
     form_class = CommentForm
 
-
     def form_valid(self, form):
         form.instance.author = self.request.user
         form.instance.post = get_object_or_404(Post, id=self.kwargs[
             'post_id'])
         return super().form_valid(form)
-
 
     def get_success_url(self):
         return reverse('blog:post_detail',

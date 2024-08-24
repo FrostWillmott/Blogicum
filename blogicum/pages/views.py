@@ -16,6 +16,7 @@ class AboutView(TemplateView):
 class RulesView(TemplateView):
     template_name = 'pages/rules.html'
 
+
 def custom_500_error(request):
     return render(request, 'pages/500.html', status=500)
 
