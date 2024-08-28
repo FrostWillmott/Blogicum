@@ -17,9 +17,10 @@ from django.views.generic import (
 )
 
 
-"""Views about User Profile"""
-
 class ProfileView(ListView):
+    """
+    View to display a user's profile with their posts.
+    """
     model = Post
     template_name = 'blog/profile.html'
     context_object_name = 'post_list'
@@ -40,6 +41,9 @@ class ProfileView(ListView):
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
+    """
+    View to edit the profile of the logged-in user.
+    """
     template_name = 'blog/user.html'
     model = User
     fields = ['first_name', 'last_name', 'email']
@@ -52,10 +56,10 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
                             kwargs={'username': self.object.username})
 
 
-"""Views about showing Posts"""
-
-
 def filter_posts():
+    """
+    Filter posts.
+    """
     return Post.objects.select_related(
         'author', 'location', 'category').filter(
         pub_date__lte=timezone.now(),
@@ -75,6 +79,9 @@ def filter_posts():
 
 
 class IndexView(ListView):
+    """
+    View to display the index page with a list of posts.
+    """
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
@@ -85,6 +92,9 @@ class IndexView(ListView):
 
 
 class PostDetailView(DetailView):
+    """
+    View to display the details of a single post.
+    """
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
@@ -104,6 +114,9 @@ class PostDetailView(DetailView):
 
 
 class CategoryView(ListView):
+    """
+    View to display posts of a specific category.
+    """
     model = Post
     template_name = 'blog/category.html'
     context_object_name = 'category_list'
@@ -117,10 +130,10 @@ class CategoryView(ListView):
         return filter_posts().filter(category__slug=category_slug)
 
 
-"""Views about changing Posts"""
-
-
 class CreatePostView(LoginRequiredMixin, CreateView):
+    """
+    View to create a new post.
+    """
     template_name = 'blog/create.html'
     model = Post
     form_class = PostForm
@@ -134,8 +147,11 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         return reverse('blog:profile',
                        kwargs={'username': self.request.user.username})
 
-class EditPostView(UserPassesTestMixin, UpdateView):
 
+class EditPostView(UserPassesTestMixin, UpdateView):
+    """
+    View to edit an existing post.
+    """
     template_name = 'blog/create.html'
     model = Post
     form_class = PostForm
@@ -160,6 +176,9 @@ class EditPostView(UserPassesTestMixin, UpdateView):
 
 
 class DeletePostView(LoginRequiredMixin, DeleteView):
+    """
+    View to delete an existing post.
+    """
     model = Post
     template_name = 'blog/create.html'
     pk_url_kwarg = 'post_id'
@@ -179,10 +198,10 @@ class DeletePostView(LoginRequiredMixin, DeleteView):
         return context
 
 
-"""Views about Comments"""
-
-
 class CreateCommentView(LoginRequiredMixin, CreateView):
+    """
+    View to create a new comment on a post.
+    """
     template_name = 'blog/create.html'
     model = Comment
     form_class = CommentForm
@@ -204,6 +223,9 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
 
 class EditCommentView(LoginRequiredMixin, UpdateView):
+    """
+    View to edit an existing comment.
+    """
     template_name = 'blog/comment.html'
     model = Comment
     form_class = CommentForm
@@ -222,6 +244,9 @@ class EditCommentView(LoginRequiredMixin, UpdateView):
 
 
 class DeleteCommentView(LoginRequiredMixin, DeleteView):
+    """
+    View to delete an existing comment.
+    """
     model = Comment
     template_name = 'blog/comment.html'
     pk_url_kwarg = 'comment_id'
