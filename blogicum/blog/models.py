@@ -86,6 +86,9 @@ class Comment(BaseModel):
         verbose_name='Автор комментария', null=True)
     text = models.TextField(verbose_name='Текст комментария')
 
+    def __str__(self):
+        return f'Комментарий {self.author} к посту {self.post}'
+
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'

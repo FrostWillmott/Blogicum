@@ -5,8 +5,6 @@ from django.urls import path, include, reverse_lazy
 from django.conf.urls.static import static
 from django.conf import settings
 
-# from django.conf.urls import handler500, handler404
-
 urlpatterns = [
     path('', include('blog.urls', namespace='blog')),
     path('pages/', include('pages.urls', namespace='pages')),

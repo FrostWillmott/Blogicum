@@ -127,4 +127,8 @@ EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
 MEDIA_ROOT = BASE_DIR / 'media'  # Путь к папке media
 
+LOGIN_URL = 'login'
+
 LOGIN_REDIRECT_URL = 'blog:index'
+
+PAGIN_SIZE = 10
