@@ -83,6 +83,7 @@ class IndexView(ListView):
 
 class PostDetailView(DetailView):
     """View to display the details of a single post."""
+
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
@@ -174,7 +175,6 @@ class EditPostView(LoginRequiredMixin, PostViewMixin, UpdateView):
 
 class DeletePostView(LoginRequiredMixin, PostViewMixin, DeleteView):
     """View to delete an existing post."""
-
 
     def get_success_url(self):
         return reverse_lazy('blog:profile', kwargs={
