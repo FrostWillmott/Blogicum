@@ -232,13 +232,11 @@ class CommentViewMixin(UserPassesTestMixin):
                             kwargs={'post_id': self.kwargs['post_id']})
 
 
+class DeleteCommentView(LoginRequiredMixin, CommentViewMixin, DeleteView):
+    """ View to delete an existing comment."""
+
+
 class EditCommentView(LoginRequiredMixin, CommentViewMixin, UpdateView):
     """View to edit an existing comment."""
 
     form_class = CommentForm
-
-
-class DeleteCommentView(LoginRequiredMixin, CommentViewMixin, DeleteView):
-    """ View to delete an existing comment."""
-
-    pass
