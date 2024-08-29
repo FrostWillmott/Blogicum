@@ -240,4 +240,5 @@ class EditCommentView(LoginRequiredMixin, CommentViewMixin, UpdateView):
 
 class DeleteCommentView(LoginRequiredMixin, CommentViewMixin, DeleteView):
     """ View to delete an existing comment."""
+
     pass
