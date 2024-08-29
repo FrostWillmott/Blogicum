@@ -1,10 +1,7 @@
-from django import forms
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Count
 from django.utils import timezone
 from django.http import Http404
-from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
@@ -18,9 +15,7 @@ from django.views.generic import (
 
 
 class ProfileView(ListView):
-    """
-    View to display a user's profile with their posts.
-    """
+    """View to display a user's profile with their posts."""
     model = Post
     template_name = 'blog/profile.html'
     context_object_name = 'post_list'
@@ -46,9 +41,7 @@ class ProfileView(ListView):
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
-    """
-    View to edit the profile of the logged-in user.
-    """
+    """View to edit the profile of the logged-in user."""
     template_name = 'blog/user.html'
     model = User
     fields = ['first_name', 'last_name', 'email']
@@ -77,9 +70,7 @@ def get_posts_queryset(filter_param=False, annotate_param=False):
 
 
 class IndexView(ListView):
-    """
-    View to display the index page with a list of posts.
-    """
+    """View to display the index page with a list of posts."""
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
@@ -88,9 +79,7 @@ class IndexView(ListView):
 
 
 class PostDetailView(DetailView):
-    """
-    View to display the details of a single post.
-    """
+    """View to display the details of a single post."""
     model = Post
     template_name = 'blog/detail.html'
     context_object_name = 'post'
@@ -115,9 +104,7 @@ class PostDetailView(DetailView):
 
 
 class CategoryView(ListView):
-    """
-    View to display posts of a specific category.
-    """
+    """View to display posts of a specific category."""
     model = Post
     template_name = 'blog/category.html'
     context_object_name = 'category_list'
@@ -140,9 +127,7 @@ class CategoryView(ListView):
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):
-    """
-    View to create a new post.
-    """
+    """View to create a new post."""
     template_name = 'blog/create.html'
     model = Post
     form_class = PostForm
@@ -157,9 +142,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
 
 class PostViewMixin(UserPassesTestMixin):
-    """
-    Mixin for views that edit or delete posts
-    """
+    """Mixin for views that edit or delete posts"""
     model = Post
     template_name = 'blog/create.html'
     pk_url_kwarg = 'post_id'
@@ -174,9 +157,7 @@ class PostViewMixin(UserPassesTestMixin):
 
 
 class EditPostView(LoginRequiredMixin, PostViewMixin, UpdateView):
-    """
-    View to edit an existing post.
-    """
+    """View to edit an existing post."""
     form_class = PostForm
 
     def get_success_url(self):
@@ -185,9 +166,7 @@ class EditPostView(LoginRequiredMixin, PostViewMixin, UpdateView):
 
 
 class DeletePostView(LoginRequiredMixin, PostViewMixin, DeleteView):
-    """
-    View to delete an existing post.
-    """
+    """View to delete an existing post."""
 
     def get_success_url(self):
         return reverse_lazy('blog:profile', kwargs={
@@ -202,9 +181,7 @@ class DeletePostView(LoginRequiredMixin, PostViewMixin, DeleteView):
 
 
 class CreateCommentView(LoginRequiredMixin, CreateView):
-    """
-    View to create a new comment on a post.
-    """
+    """View to create a new comment on a post."""
     template_name = 'blog/create.html'
     model = Comment
     form_class = CommentForm
@@ -226,9 +203,7 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
 
 
 class CommentViewMixin(UserPassesTestMixin):
-    """
-    Mixin for views that edit or delete comments
-    """
+    """Mixin for views that edit or delete comments"""
     model = Comment
     template_name = 'blog/comment.html'
     pk_url_kwarg = 'comment_id'
@@ -248,13 +223,9 @@ class CommentViewMixin(UserPassesTestMixin):
 
 
 class EditCommentView(LoginRequiredMixin, CommentViewMixin, UpdateView):
-    """
-    View to edit an existing comment.
-    """
+    """View to edit an existing comment."""
     form_class = CommentForm
 
 
 class DeleteCommentView(LoginRequiredMixin, CommentViewMixin, DeleteView):
-    """
-    View to delete an existing comment.
-    """
+    """ View to delete an existing comment."""
