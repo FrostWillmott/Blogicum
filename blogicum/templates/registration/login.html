@@ -21,7 +21,7 @@
         Войти в систему
       </div>
       <div class="card-body">
-        <form method="post" action="{% url 'blog:login' %}">
+        <form method="post" action="{% url 'login' %}">
           {% csrf_token %}
           {% bootstrap_form form %}
           <input type="hidden" name="next" value="{{ next }}">
