@@ -12,12 +12,12 @@ class Location(BaseModel):
         verbose_name='Название места',
         max_length=MAX_LENGTH)
 
-    def __str__(self):
-        return self.name
-
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
+
+    def __str__(self):
+        return self.name
 
 
 class Category(BaseModel):
@@ -34,12 +34,12 @@ class Category(BaseModel):
         verbose_name='Описание'
     )
 
-    def __str__(self):
-        return self.title
-
     class Meta:
         verbose_name = 'категория'
         verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.title
 
 
 class Post(BaseModel):
@@ -86,10 +86,12 @@ class Comment(BaseModel):
         verbose_name='Автор комментария', null=True)
     text = models.TextField(verbose_name='Текст комментария')
 
-    def __str__(self):
-        return f'Комментарий {self.author} к посту {self.post}'
-
     class Meta:
         verbose_name = 'комментарий'
         verbose_name_plural = 'Комментарии'
         ordering = ['created_at']
+
+    def __str__(self):
+        return f'Комментарий {self.author} к посту {self.post}'
+
+

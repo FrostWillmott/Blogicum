@@ -27,12 +27,9 @@ class ProfileView(ListView):
 
     def get_queryset(self):
         profile_user = self.get_user_object()
-        if (self.request.user.is_authenticated
-                and self.request.user == profile_user):
-            queryset = get_posts_queryset(False, True)
-        else:
-            queryset = get_posts_queryset(True, True)
-        queryset = queryset.filter(author=profile_user)
+        queryset = get_posts_queryset(
+            filter_param=self.request.user != profile_user,
+            annotate_param=True).filter(author=profile_user)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -78,7 +75,7 @@ class IndexView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
     paginate_by = settings.PAGIN_SIZE
-    queryset = get_posts_queryset(True, True)
+    queryset = get_posts_queryset(filter_param=True, annotate_param=True)
 
 
 class PostDetailView(DetailView):
@@ -88,7 +85,8 @@ class PostDetailView(DetailView):
     template_name = 'blog/detail.html'
     context_object_name = 'post'
     pk_url_kwarg = 'post_id'
-    queryset = get_posts_queryset(False, False)
+    queryset = get_posts_queryset(filter_param=False,
+                                  annotate_param=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -110,7 +108,6 @@ class PostDetailView(DetailView):
 class CategoryView(ListView):
     """View to display posts of a specific category."""
 
-    model = Post
     template_name = 'blog/category.html'
     context_object_name = 'category_list'
     paginate_by = settings.PAGIN_SIZE
@@ -128,7 +125,9 @@ class CategoryView(ListView):
 
     def get_queryset(self):
         category = self.get_category_object()
-        return get_posts_queryset(True, True).filter(category=category)
+        return get_posts_queryset(filter_param=True,
+                                  annotate_param=True
+                                  ).filter(category=category)
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):

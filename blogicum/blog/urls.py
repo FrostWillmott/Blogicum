@@ -33,6 +33,6 @@ urlpatterns = [
          name='category_posts'),
     path('profile/<str:username>/', ProfileView.as_view(),
          name='profile'),
-    path("profile/<slug:username>/edit/", ProfileEditView.as_view(),
+    path("profile/<str:username>/edit/", ProfileEditView.as_view(),
          name="edit_profile"),
 ]
