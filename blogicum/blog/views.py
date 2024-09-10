@@ -1,4 +1,6 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import (
+    LoginRequiredMixin, UserPassesTestMixin
+)
 from django.db.models import Count
 from django.utils import timezone
 from django.http import Http404
@@ -17,9 +19,9 @@ from django.views.generic import (
 class ProfileView(ListView):
     """View to display a user's profile with their posts."""
 
-    model = Post
+    # model = Post
     template_name = 'blog/profile.html'
-    context_object_name = 'post_list'
+    # context_object_name = 'post_list'
     paginate_by = settings.PAGIN_SIZE
 
     def get_user_object(self):
@@ -50,7 +52,7 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('blog:profile',
-                            kwargs={'username': self.object.username})
+                            kwargs={'username': self.request.user.username})
 
 
 def get_posts_queryset(filter_param=False, annotate_param=False):
@@ -71,9 +73,9 @@ def get_posts_queryset(filter_param=False, annotate_param=False):
 class IndexView(ListView):
     """View to display the index page with a list of posts."""
 
-    model = Post
+    # model = Post
     template_name = 'blog/index.html'
-    context_object_name = 'post_list'
+    # context_object_name = 'post_list'
     paginate_by = settings.PAGIN_SIZE
     queryset = get_posts_queryset(filter_param=True, annotate_param=True)
 
@@ -81,9 +83,9 @@ class IndexView(ListView):
 class PostDetailView(DetailView):
     """View to display the details of a single post."""
 
-    model = Post
+    # model = Post
     template_name = 'blog/detail.html'
-    context_object_name = 'post'
+    # context_object_name = 'post'
     pk_url_kwarg = 'post_id'
     queryset = get_posts_queryset(filter_param=False,
                                   annotate_param=False)
@@ -109,7 +111,7 @@ class CategoryView(ListView):
     """View to display posts of a specific category."""
 
     template_name = 'blog/category.html'
-    context_object_name = 'category_list'
+    # context_object_name = 'category_list'
     paginate_by = settings.PAGIN_SIZE
 
     def get_category_object(self):
@@ -193,6 +195,12 @@ class CreateCommentView(LoginRequiredMixin, CreateView):
     template_name = 'blog/create.html'
     model = Comment
     form_class = CommentForm
+
+    def dispatch(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        if not post.is_published and post.author != request.user:
+            raise Http404("Only the author can comment on unpublished posts.")
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         form.instance.author = self.request.user
